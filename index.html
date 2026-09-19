@@ -222,6 +222,66 @@ input[type="range"]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;b
   border-bottom-left-radius:999px;border-bottom-right-radius:999px;
 }
 
+.device[data-kind="phone"] .base,
+.device[data-kind="tablet"] .base{display:none}
+.device[data-kind="phone"] .lid,
+.device[data-kind="tablet"] .lid{
+  border-radius:var(--body-r);
+  padding:var(--pad-top) var(--bezel) var(--pad-bot);
+  background:linear-gradient(115deg,var(--skin-a),var(--skin-b) 50%,var(--skin-a));
+  box-shadow:0 0 0 1px var(--lid-edge) inset, 0 30px 56px -22px rgba(0,0,0,.7);
+}
+.device[data-kind="phone"] .lid::before,
+.device[data-kind="tablet"] .lid::before{
+  content:"";position:absolute;inset:var(--glass-in);z-index:0;
+  background:#08090B;border-radius:calc(var(--body-r) - var(--glass-in));
+}
+.device[data-kind="phone"] .screen,
+.device[data-kind="tablet"] .screen{z-index:1}
+.device[data-kind="phone"] .notch,
+.device[data-kind="tablet"] .notch{
+  top:calc(var(--scr-off-y) + var(--island-top));
+  width:var(--island-w);height:var(--island-h);
+  border-radius:999px;background:#07080A;
+  place-items:center;
+}
+.device[data-kind="phone"] .notch i,
+.device[data-kind="tablet"] .notch i{
+  width:calc(var(--island-h)*.42);height:calc(var(--island-h)*.42);
+  background:#171A1F;margin:0 0 0 calc(var(--island-w)*.38);
+}
+.device[data-notch="hole"] .notch{
+  width:calc(var(--hole-r)*2);height:calc(var(--hole-r)*2);
+  top:calc(var(--scr-off-y) + var(--hole-top));border-radius:50%;
+}
+.device[data-notch="hole"] .notch i{display:none}
+.device[data-notch="none"] .notch{display:none}
+
+.statusbar{
+  flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  height:var(--chrome-h);padding:0 calc(var(--cw)*.075);
+  background:var(--chrome-bg);color:var(--chrome-text);
+}
+.device[data-kind="tablet"] .statusbar{padding:0 calc(var(--cw)*.035)}
+.statusbar .clock{font-weight:600;font-size:calc(var(--chrome-h)*.30);letter-spacing:.01em}
+.device[data-kind="tablet"] .statusbar .clock{font-size:calc(var(--chrome-h)*.46)}
+.statusbar .icons{display:flex;align-items:center}
+.statusbar svg{height:calc(var(--chrome-h)*.27);width:auto;display:block}
+.device[data-kind="tablet"] .statusbar svg{height:calc(var(--chrome-h)*.42)}
+
+.homebar{
+  position:absolute;left:0;right:0;bottom:0;height:var(--hb-h);
+  z-index:4;display:grid;place-items:end center;pointer-events:none;
+}
+.homebar::after{
+  content:"";display:block;
+  width:calc(var(--cw)*.36);height:calc(var(--cw)*.0135);
+  margin-bottom:calc(var(--cw)*.0243);
+  border-radius:999px;background:rgba(18,18,20,.70);
+}
+.screen[data-safe="1"] .homebar{position:relative;flex:0 0 var(--hb-h);background:#fff}
+.screen[data-dark="1"] .homebar::after{background:rgba(255,255,255,.85)}
+
 /* browser chrome inside the screen */
 .chrome{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--cw)*.010);padding:0 calc(var(--cw)*.012);
   height:var(--chrome-h);background:var(--chrome-bg);border-bottom:1px solid var(--chrome-line)}
@@ -237,13 +297,14 @@ input[type="range"]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;b
 iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
 
 .empty{
-  flex:1;display:grid;place-items:center;background:#F3F5F6;color:#5A6B73;text-align:center;padding:6%;
+  flex:1;display:grid;place-items:center;background:#F3F5F6;color:#5A6B73;text-align:center;padding:7%;
+  font-size:calc(16px * var(--empty-k, 1));
 }
-.empty .inner{max-width:60%}
-.empty h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(20px,3.2vw,34px);margin:0 0 10px;color:#22333B}
-.empty p{margin:0;font-size:clamp(12px,1.3vw,15px);line-height:1.5}
-.empty .mark{width:44px;height:44px;margin:0 auto 18px;border-radius:12px;border:1.5px dashed #9FB2BA;display:grid;place-items:center}
-.empty .mark svg{width:20px;height:20px;stroke:#7C939C;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.empty .inner{max-width:76%}
+.empty h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:2em;margin:0 0 .5em;color:#22333B;line-height:1.1}
+.empty p{margin:0;font-size:.92em;line-height:1.5}
+.empty .mark{width:2.8em;height:2.8em;margin:0 auto 1.1em;border-radius:.75em;border:1.5px dashed #9FB2BA;display:grid;place-items:center}
+.empty .mark svg{width:1.25em;height:1.25em;stroke:#7C939C;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 
 /* ── overlays ────────────────────────────────────────── */
 .dropveil{
@@ -319,6 +380,50 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
 .emptybasket h4{margin:0 0 6px;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;font-size:21px;color:var(--muted)}
 .emptybasket p{margin:0;font-size:12.5px}
 
+/* recording */
+.recbtn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;
+  padding:11px;border-radius:8px;font-size:13.5px;font-weight:600;
+  background:#C4362B;border:1px solid #D9483C;color:#FFECE9;
+}
+.recbtn:hover:not(:disabled){background:#D63F33}
+.recbtn:disabled{background:#3A2B29;border-color:#3A2B29;color:#7C6360;cursor:not-allowed}
+.recbtn i{width:10px;height:10px;border-radius:50%;background:currentColor;display:block}
+
+body.rec-fs .topbar{display:none}
+body.rec-fs .rail{flex:0 0 188px;width:188px;background:var(--bg);border-left-color:var(--line)}
+body.rec-fs .rail .section{display:none}
+body.rec-fs .rail .section.reclive{display:block}
+body.rec-fs .stage{padding:20px}
+body.rec-fs{overflow:hidden}
+
+.reclive .box{
+  background:var(--panel);border:1px solid #4A2A26;border-radius:var(--radius);padding:12px;
+}
+.reclive .top{display:flex;align-items:center;gap:9px;margin-bottom:4px}
+.reclive .reclight{width:9px;height:9px;border-radius:50%;background:#FF5F57;flex:0 0 auto;animation:blink 1.1s steps(2,end) infinite}
+@keyframes blink{50%{opacity:.25}}
+.reclive .t{font-variant-numeric:tabular-nums;font-size:19px;letter-spacing:.01em}
+.reclive .m{color:var(--muted-2);font-size:11px;line-height:1.35;margin-bottom:11px;font-variant-numeric:tabular-nums}
+.reclive .hint{margin-top:7px;text-align:center}
+
+.countdown{
+  position:fixed;inset:0;z-index:75;display:none;place-items:center;
+  background:rgba(8,12,15,.55);backdrop-filter:blur(3px);
+}
+.countdown.on{display:grid}
+.countdown span{
+  font-family:"Instrument Serif",Georgia,serif;font-size:120px;line-height:1;color:var(--accent);
+}
+
+.speedrow{display:flex;align-items:center;gap:10px;padding:0 16px 14px}
+.speedrow .lbl{color:var(--muted-2);font-size:12px;flex:0 0 auto}
+.speedrow .seg{flex:1}
+.sheet .preview video{max-width:100%;max-height:52dvh;display:block;background:#000}
+
+.busy .msg{margin-top:14px;color:var(--muted);font-size:12.5px;text-align:center;max-width:240px}
+.busy .stack{display:grid;justify-items:center}
+
 .toast{
   position:fixed;left:50%;bottom:22px;transform:translate(-50%,14px);
   background:var(--panel-2);border:1px solid var(--line-2);border-radius:10px;
@@ -384,6 +489,17 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
                 <div class="pill" id="chromePill">index.html</div>
                 <div class="spacer"></div>
               </div>
+              <div class="statusbar" id="statusbar" hidden>
+                <span class="clock" id="sbClock">9:41</span>
+                <span class="icons"><svg viewBox="0 0 62 15" aria-hidden="true">
+                  <g fill="currentColor"><rect x="0" y="9" width="2.6" height="5.2" rx="1"/><rect x="4.4" y="6.8" width="2.6" height="7.4" rx="1"/><rect x="8.8" y="4.6" width="2.6" height="9.6" rx="1"/><rect x="13.2" y="2.4" width="2.6" height="11.8" rx="1"/></g>
+                  <g stroke="currentColor" stroke-width="1.7" stroke-linecap="round" fill="none"><path d="M20.4 7.4a7.2 7.2 0 0 1 9.2 0"/><path d="M22.7 10.2a4 4 0 0 1 4.6 0"/></g>
+                  <circle cx="25" cy="13" r="1.3" fill="currentColor"/>
+                  <rect x="35" y="4.2" width="19.5" height="10" rx="3.1" stroke="currentColor" stroke-width="1.3" fill="none" opacity=".45"/>
+                  <rect x="36.6" y="5.8" width="12" height="6.8" rx="2" fill="currentColor"/>
+                  <path d="M56.4 7.6v3.2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".45"/>
+                </svg></span>
+              </div>
               <div class="empty" id="empty">
                 <div class="inner">
                   <div class="mark"><svg viewBox="0 0 24 24"><path d="M12 16V4"/><path d="M8 8l4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg></div>
@@ -393,16 +509,27 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
               </div>
               <iframe id="frame" hidden title="Your page preview"
                       allow="clipboard-write; fullscreen"></iframe>
+              <div class="homebar" id="homebar" hidden></div>
             </div>
           </div>
           <div class="base"><span class="groove"></span></div>
         </div>
       </div>
       <div class="dropveil" id="veil">Release to load</div>
-      <div class="busy" id="busy"><div class="spinner"></div></div>
+      <div class="busy" id="busy"><div class="stack"><div class="spinner"></div><div class="msg" id="busyMsg" hidden></div></div></div>
     </main>
 
     <aside class="rail">
+
+      <div class="section reclive" id="recLive" hidden>
+        <h2>Recording</h2>
+        <div class="box">
+          <div class="top"><span class="reclight"></span><span class="t" id="recTime">0:00</span></div>
+          <div class="m" id="recMeta"></div>
+          <button class="btn wide" id="stopRec">Stop</button>
+          <p class="hint">or press Esc</p>
+        </div>
+      </div>
 
       <div class="section">
         <h2>Your page</h2>
@@ -433,11 +560,22 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
       <div class="section">
         <h2>Device</h2>
         <div class="field">
-          <select id="deviceSel" aria-label="MacBook model">
-            <option value="air13">MacBook Air 13" — 1280 × 832</option>
-            <option value="pro14" selected>MacBook Pro 14" — 1512 × 982</option>
-            <option value="air15">MacBook Air 15" — 1440 × 932</option>
-            <option value="pro16">MacBook Pro 16" — 1728 × 1117</option>
+          <select id="deviceSel" aria-label="Device">
+            <optgroup label="Laptop">
+              <option value="air13">MacBook Air 13" — 1280 × 832</option>
+              <option value="pro14" selected>MacBook Pro 14" — 1512 × 982</option>
+              <option value="air15">MacBook Air 15" — 1440 × 932</option>
+              <option value="pro16">MacBook Pro 16" — 1728 × 1117</option>
+            </optgroup>
+            <optgroup label="Phone">
+              <option value="iphone">iPhone 15 / 16 — 393 × 852</option>
+              <option value="iphonemax">iPhone 16 Pro Max — 440 × 956</option>
+              <option value="iphonese">iPhone SE — 375 × 667</option>
+              <option value="pixel">Pixel 9 — 412 × 916</option>
+            </optgroup>
+            <optgroup label="Tablet">
+              <option value="ipad">iPad Pro 11" — 834 × 1194</option>
+            </optgroup>
           </select>
         </div>
         <div class="field">
@@ -447,11 +585,11 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
             <button data-v="black" aria-pressed="false">Space black</button>
           </div>
         </div>
-        <label class="check"><input type="checkbox" id="notchOn" checked> Camera notch</label>
+        <label class="check" id="notchRow"><input type="checkbox" id="notchOn" checked> <span id="notchLabel">Camera notch</span></label>
       </div>
 
       <div class="section">
-        <h2>Browser window</h2>
+        <h2 id="chromeHead">Browser window</h2>
         <div class="field">
           <div class="seg" id="chromeSeg" role="group" aria-label="Browser window">
             <button data-v="off" aria-pressed="true">Off</button>
@@ -459,9 +597,13 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
             <button data-v="dark" aria-pressed="false">Dark</button>
           </div>
         </div>
-        <div class="field">
+        <div class="field" id="urlField">
           <label for="urlInput">Address shown</label>
           <input type="text" id="urlInput" value="yourshop.etsy.com" spellcheck="false">
+        </div>
+        <div class="field" id="clockField" hidden>
+          <label for="clockInput">Clock</label>
+          <input type="text" id="clockInput" value="9:41" spellcheck="false">
         </div>
       </div>
 
@@ -485,7 +627,7 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
         <div class="field">
           <label for="frameSeg">What to capture</label>
           <div class="seg" id="frameSeg" role="group" aria-label="What to capture">
-            <button data-v="macbook" aria-pressed="true">MacBook</button>
+            <button data-v="macbook" aria-pressed="true" id="frameOptLabel">Device</button>
             <button data-v="screen" aria-pressed="false">Screen only</button>
           </div>
         </div>
@@ -502,6 +644,31 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
         <button class="btn primary wide" id="captureBtn" disabled>Take screenshot</button>
         <p class="hint" id="exportHint">Exports at 3376 × 2252 px.</p>
         <p class="hint">Shots collect in the basket at the top. Download them together as a ZIP.</p>
+      </div>
+
+      <div class="section">
+        <h2>Screen recording</h2>
+        <div class="field">
+          <label for="recModeSeg">Stage</label>
+          <div class="seg" id="recModeSeg" role="group" aria-label="Recording stage">
+            <button data-v="fs" aria-pressed="true">Fullscreen</button>
+            <button data-v="win" aria-pressed="false">In window</button>
+          </div>
+        </div>
+        <div class="field">
+          <label for="speedSeg">Playback speed</label>
+          <div class="seg" id="speedSeg" role="group" aria-label="Playback speed">
+            <button data-v="1" aria-pressed="true">1×</button>
+            <button data-v="2" aria-pressed="false">2×</button>
+            <button data-v="2.5" aria-pressed="false">2.5×</button>
+            <button data-v="3" aria-pressed="false">3×</button>
+          </div>
+        </div>
+        <label class="check"><input type="checkbox" id="cursorOn" checked> Draw a pointer and click ripples</label>
+        <label class="check"><input type="checkbox" id="countdownOn" checked> Count down from 3</label>
+        <div style="height:12px"></div>
+        <button class="recbtn" id="recordBtn" disabled><i></i>Start recording</button>
+        <p class="hint" id="recHint">Uses the MacBook, backdrop and margin settings above. Your browser will ask which tab to share — pick this one.</p>
       </div>
 
     </aside>
@@ -540,6 +707,34 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
   </div>
 </div>
 
+<div class="countdown" id="countdown"><span id="countNum">3</span></div>
+
+<div class="modal" id="videoModal" role="dialog" aria-modal="true" aria-labelledby="videoTitle">
+  <div class="sheet">
+    <header>
+      <h3 id="videoTitle">Recording ready</h3>
+      <button class="iconbtn" id="closeVideo" aria-label="Close">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </header>
+    <div class="preview"><video id="recVideo" controls playsinline></video></div>
+    <div class="speedrow">
+      <span class="lbl">Speed</span>
+      <div class="seg" id="respeedSeg" role="group" aria-label="Re-export speed">
+        <button data-v="1" aria-pressed="true">1×</button>
+        <button data-v="2" aria-pressed="false">2×</button>
+        <button data-v="2.5" aria-pressed="false">2.5×</button>
+        <button data-v="3" aria-pressed="false">3×</button>
+      </div>
+      <button class="btn ghost" id="respeedBtn" style="flex:0 0 auto">Re-export</button>
+    </div>
+    <footer>
+      <span class="size" id="recSize"></span>
+      <button class="btn ghost" id="discardVideo">Discard</button>
+      <button class="btn primary" id="saveVideo">Save video</button>
+    </footer>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -549,10 +744,15 @@ iframe#frame{flex:1 1 auto;width:100%;border:0;display:block;background:#fff}
 /* ─────────────────────────────  state  ───────────────────────────── */
 
 var DEVICES = {
-  air13:{w:1280,h:832,label:'MacBook Air 13"'},
-  pro14:{w:1512,h:982,label:'MacBook Pro 14"'},
-  air15:{w:1440,h:932,label:'MacBook Air 15"'},
-  pro16:{w:1728,h:1117,label:'MacBook Pro 16"'}
+  air13:  {w:1280, h:832,  kind:'laptop', label:'MacBook Air 13"'},
+  pro14:  {w:1512, h:982,  kind:'laptop', label:'MacBook Pro 14"'},
+  air15:  {w:1440, h:932,  kind:'laptop', label:'MacBook Air 15"'},
+  pro16:  {w:1728, h:1117, kind:'laptop', label:'MacBook Pro 16"'},
+  iphone: {w:393,  h:852,  kind:'phone',  notch:'island', label:'iPhone 15 / 16'},
+  iphonemax:{w:440,h:956,  kind:'phone',  notch:'island', label:'iPhone 16 Pro Max'},
+  iphonese:{w:375, h:667,  kind:'phone',  notch:'none',   label:'iPhone SE'},
+  pixel:  {w:412,  h:916,  kind:'phone',  notch:'hole',   label:'Pixel 9'},
+  ipad:   {w:834,  h:1194, kind:'tablet', notch:'none',   label:'iPad Pro 11"'}
 };
 
 var BACKDROPS = [
@@ -579,10 +779,11 @@ var CHROME_THEMES = {
 
 var S = {
   device:'pro14', finish:'silver', notch:true,
-  chrome:'off', url:'yourshop.etsy.com',
+  chrome:'off', url:'yourshop.etsy.com', clock:'9:41',
   backdrop:'studio', custom:'#B2BAB6',
   pad:120, shadow:true,
   frame:'macbook', scale:2, full:false,
+  recMode:'fs', speed:1, cursor:true, countdown:true,
   fileName:'', fileMeta:'', loaded:false
 };
 
@@ -616,50 +817,125 @@ function segInit(id, key, onChange){
   });
 }
 
-function chromeHeight(W){ return Math.round(W * 0.0344); }   // ~52px at 1512
+function chromeHeight(d){
+  if(d.kind === 'laptop') return Math.round(d.w * 0.0344);   // ~52px at 1512
+  if(d.kind === 'tablet') return Math.round(d.w * 0.0288);   // iPad status bar
+  return Math.round(d.w * 0.137);                            // iOS status bar
+}
 
-function geometry(W, H){
-  var bezel = Math.round(W * 0.0125);
-  var lidW = W + bezel*2, lidH = H + bezel*2;
+var noSafeArea = false;   // full-page captures ignore the safe areas
+
+function homeBarH(d){
+  return (d.kind === 'phone' && d.notch !== 'none') ? Math.round(d.w * 0.086) : 0;
+}
+function safeBottom(d){
+  if(noSafeArea || S.chrome === 'off') return 0;
+  return homeBarH(d);
+}
+
+function geometry(d){
+  var W = d.w, H = d.h;
+  if(d.kind === 'laptop'){
+    var bezel = Math.round(W * 0.0125);
+    var lidW = W + bezel*2, lidH = H + bezel*2;
+    var baseW = Math.round(lidW * 1.065), baseH = Math.round(H * 0.030);
+    return {
+      kind:'laptop', W:W, H:H, bezel:bezel,
+      lidW:lidW, lidH:lidH,
+      lidR: Math.round(W * 0.0225),
+      scrR: Math.round(W * 0.0072),
+      notchW: Math.round(W * 0.1075),
+      notchH: Math.round(bezel * 1.5),
+      baseW: baseW, baseH: baseH,
+      frameW: baseW, frameH: lidH + baseH,
+      scrOffX: Math.round((baseW - lidW)/2) + bezel,
+      scrOffY: bezel
+    };
+  }
+  var tablet = (d.kind === 'tablet');
+  var bz = Math.round(W * (tablet ? 0.0265 : 0.0305));
+  var plain = (d.notch === 'none' && !tablet);          // iPhone SE: thick top/bottom
+  var topBz = plain ? Math.round(W * 0.155) : bz;
   return {
-    W:W, H:H, bezel:bezel,
-    lidW:lidW, lidH:lidH,
-    lidR: Math.round(W * 0.0225),
-    scrR: Math.round(W * 0.0072),
-    notchW: Math.round(W * 0.1075),
-    notchH: Math.round(bezel * 1.5),
-    baseW: Math.round(lidW * 1.065),
-    baseH: Math.round(H * 0.030)
+    kind: d.kind, W:W, H:H, bezel:bz, topBezel:topBz, plain:plain,
+    bodyW: W + bz*2,
+    bodyH: H + (plain ? topBz*2 : bz*2),
+    bodyR: Math.round(W * (tablet ? 0.055 : (plain ? 0.085 : 0.168))),
+    scrR:  Math.round(W * (tablet ? 0.042 : (plain ? 0.012 : 0.138))),
+    islandW: Math.round(W * 0.318),
+    islandH: Math.round(W * 0.0916),
+    islandTop: Math.round(W * 0.029),
+    holeR: Math.round(W * 0.0255),
+    holeTop: Math.round(W * 0.032),
+    frameW: W + bz*2,
+    frameH: H + (plain ? topBz*2 : bz*2),
+    scrOffX: bz,
+    scrOffY: plain ? topBz : bz
   };
 }
 
 /* ─────────────────────────────  live preview  ────────────────────── */
 
 function render(){
-  var d = DEVICES[S.device], g = geometry(d.w, d.h);
+  var d = DEVICES[S.device], g = geometry(d);
   var skin = SKINS[S.finish];
-  var chH = S.chrome === 'off' ? 0 : chromeHeight(d.w);
+  var chH = S.chrome === 'off' ? 0 : chromeHeight(d);
   var st = $device.style;
+  var laptop = (d.kind === 'laptop');
+
+  $device.setAttribute('data-kind', d.kind);
+  $device.setAttribute('data-notch', laptop ? 'notch' : (d.notch || 'none'));
 
   st.setProperty('--bezel', g.bezel + 'px');
-  st.setProperty('--lid-r', g.lidR + 'px');
   st.setProperty('--scr-r', g.scrR + 'px');
   st.setProperty('--scr-w', d.w + 'px');
   st.setProperty('--scr-h', d.h + 'px');
-  st.setProperty('--notch-w', g.notchW + 'px');
-  st.setProperty('--notch-h', g.notchH + 'px');
-  st.setProperty('--base-w', g.baseW + 'px');
-  st.setProperty('--base-h', g.baseH + 'px');
-  st.setProperty('--lid-w', g.lidW + 'px');
-  st.setProperty('--total-w', g.baseW + 'px');
-  st.setProperty('--lid-grad', 'linear-gradient(180deg,' + skin.lid[0] + ',' + skin.lid[1] + ')');
-  st.setProperty('--lid-edge', skin.lidEdge);
-  st.setProperty('--base-grad', 'linear-gradient(180deg,' + skin.base[0] + ',' + skin.base[1] + ')');
-  st.setProperty('--groove', skin.groove);
+  st.setProperty('--scr-off-y', g.scrOffY + 'px');
   st.setProperty('--cw', d.w + 'px');
   st.setProperty('--chrome-h', chH + 'px');
+  st.setProperty('--lid-edge', skin.lidEdge);
+  st.setProperty('--skin-a', skin.lid[0]);
+  st.setProperty('--skin-b', skin.lid[1]);
+  st.setProperty('--total-w', g.frameW + 'px');
+  st.setProperty('--empty-k', Math.max(0.5, Math.min(1, d.w / 1100)));
 
-  $notch.hidden = !S.notch;
+  if(laptop){
+    st.setProperty('--lid-r', g.lidR + 'px');
+    st.setProperty('--notch-w', g.notchW + 'px');
+    st.setProperty('--notch-h', g.notchH + 'px');
+    st.setProperty('--base-w', g.baseW + 'px');
+    st.setProperty('--base-h', g.baseH + 'px');
+    st.setProperty('--lid-w', g.lidW + 'px');
+    st.setProperty('--lid-grad', 'linear-gradient(180deg,' + skin.lid[0] + ',' + skin.lid[1] + ')');
+    st.setProperty('--base-grad', 'linear-gradient(180deg,' + skin.base[0] + ',' + skin.base[1] + ')');
+    st.setProperty('--groove', skin.groove);
+  } else {
+    st.setProperty('--lid-w', g.bodyW + 'px');
+    st.setProperty('--body-r', g.bodyR + 'px');
+    st.setProperty('--pad-top', g.scrOffY + 'px');
+    st.setProperty('--pad-bot', (g.frameH - g.H - g.scrOffY) + 'px');
+    st.setProperty('--glass-in', Math.max(1, Math.round(g.bezel * 0.34)) + 'px');
+    st.setProperty('--island-w', g.islandW + 'px');
+    st.setProperty('--island-h', g.islandH + 'px');
+    st.setProperty('--island-top', g.islandTop + 'px');
+    st.setProperty('--hole-r', g.holeR + 'px');
+    st.setProperty('--hole-top', g.holeTop + 'px');
+  }
+
+  var hasCutout = laptop || (d.notch && d.notch !== 'none');
+  $notch.hidden = !S.notch || !hasCutout;
+  el('notchRow').hidden = !hasCutout;
+  el('notchLabel').textContent = laptop ? 'Camera notch'
+    : (d.notch === 'island' ? 'Dynamic Island' : 'Punch-hole camera');
+  el('frameOptLabel').textContent = laptop ? 'MacBook' : (d.kind === 'tablet' ? 'iPad' : 'Phone');
+  var hbH = homeBarH(d);
+  el('homebar').hidden = !hbH;
+  st.setProperty('--hb-h', (hbH || 0) + 'px');
+  $screen.setAttribute('data-safe', (hbH && S.chrome !== 'off') ? '1' : '0');
+
+  el('chromeHead').textContent = laptop ? 'Browser window' : 'Status bar';
+  el('urlField').hidden = !laptop;
+  el('clockField').hidden = laptop;
 
   if(chH){
     var t = CHROME_THEMES[S.chrome];
@@ -667,11 +943,15 @@ function render(){
     st.setProperty('--chrome-line', t.line);
     st.setProperty('--chrome-pill', t.pill);
     st.setProperty('--chrome-text', t.text);
-    $chrome.hidden = false;
+    $chrome.hidden = !laptop;
+    el('statusbar').hidden = laptop;
     el('chromePill').textContent = S.url;
+    el('sbClock').textContent = S.clock;
   } else {
     $chrome.hidden = true;
+    el('statusbar').hidden = true;
   }
+  $screen.setAttribute('data-dark', S.chrome === 'dark' ? '1' : '0');
 
   el('dimsText').textContent = d.w + ' × ' + d.h;
   fit();
@@ -680,14 +960,15 @@ function render(){
 
 var lastFit = '';
 function fit(){
-  var d = DEVICES[S.device], g = geometry(d.w, d.h);
-  var totalW = g.baseW, totalH = g.lidH + g.baseH;
-  var availW = $stage.clientWidth - 56;
+  var d = DEVICES[S.device], g = geometry(d);
+  var totalW = g.frameW, totalH = g.frameH;
+  var fsMode = document.body.classList.contains('rec-fs');
+  var availW = $stage.clientWidth - (fsMode ? 40 : 56);
   var availH = $stage.clientHeight - 56;
   var k = Math.min(availW / totalW, availH / totalH, 1);
   if(!isFinite(k) || k <= 0) k = 0.3;
   k = Math.round(k * 1000) / 1000;
-  var sig = k + '|' + totalW + '|' + totalH;
+  var sig = k + '|' + totalW + '|' + totalH + '|' + fsMode;
   if(sig === lastFit) return;
   lastFit = sig;
   $device.style.transform = 'scale(' + k + ')';
@@ -702,9 +983,9 @@ function fit(){
 }
 
 function updateExportHint(){
-  var d = DEVICES[S.device], g = geometry(d.w, d.h);
+  var d = DEVICES[S.device], g = geometry(d);
   var w, h;
-  if(S.frame === 'macbook'){ w = g.baseW; h = g.lidH + g.baseH; }
+  if(S.frame === 'macbook'){ w = g.frameW; h = g.frameH; }
   else { w = d.w; h = d.h; }
   w += S.pad*2; h += S.pad*2;
   el('exportHint').textContent = S.full
@@ -741,7 +1022,14 @@ var INJECT = [
 'window.addEventListener("message",function(e){var d=e.data;if(!d||d.__mb!=="cmd")return;',
 ' if(d.cmd==="back"){history.back()}',
 ' else if(d.cmd==="forward"){history.forward()}',
+' else if(d.cmd==="ptron"){PT=true}',
+' else if(d.cmd==="ptroff"){PT=false;send({__mb:"ptrout"})}',
 ' else if(d.cmd==="capture"){shoot(d)}});',
+'var PT=false,pq=0;',
+'document.addEventListener("mousemove",function(e){if(!PT||pq)return;var x=e.clientX,y=e.clientY;',
+' pq=requestAnimationFrame(function(){pq=0;send({__mb:"ptr",x:x,y:y})})},true);',
+'document.addEventListener("mousedown",function(e){if(PT)send({__mb:"tap",x:e.clientX,y:e.clientY})},true);',
+'document.addEventListener("mouseleave",function(){if(PT)send({__mb:"ptrout"})},true);',
 'function ready(){send({__mb:"ready",title:document.title||"",hash:location.hash||""})}',
 'if(document.readyState==="complete")setTimeout(ready,0);else window.addEventListener("load",ready);',
 'window.addEventListener("hashchange",function(){send({__mb:"hash",hash:location.hash||""})});',
@@ -980,6 +1268,7 @@ async function handleFiles(files){
     el('sourceLoaded').hidden = false;
     el('urlText').textContent = S.fileName;
     el('captureBtn').disabled = false;
+    el('recordBtn').disabled = false;
     el('navBack').disabled = el('navFwd').disabled = el('navReload').disabled = false;
     mount(r.html);
     toast(r.count > 1 ? 'Loaded ' + r.name + ' with ' + (r.count - 1) + ' asset files.' : 'Loaded ' + r.name + '.');
@@ -1006,6 +1295,14 @@ window.addEventListener('message', function(e){
 
   if(d.__mb === 'ready' || d.__mb === 'hash'){
     if(d.hash) el('urlText').textContent = S.fileName + d.hash;
+    return;
+  }
+  if(d.__mb === 'ptr'){ ptr.x = d.x; ptr.y = d.y; ptr.on = true; return; }
+  if(d.__mb === 'ptrout'){ ptr.on = false; return; }
+  if(d.__mb === 'tap'){
+    ptr.x = d.x; ptr.y = d.y; ptr.on = true;
+    ripples.push({x:d.x, y:d.y, t:performance.now()});
+    if(ripples.length > 8) ripples.shift();
     return;
   }
   if(d.__mb === 'shot'){
@@ -1086,13 +1383,62 @@ function drawChromeBar(ctx, x, y, w, h){
   ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
 }
 
+function drawStatusBar(ctx, x, y, w, h, d){
+  var t = CHROME_THEMES[S.chrome], tablet = (d.kind === 'tablet');
+  ctx.fillStyle = t.bg; ctx.fillRect(x, y, w, h);
+  var cy = y + h * (tablet ? 0.52 : 0.60);
+  ctx.fillStyle = t.text;
+  ctx.font = '600 ' + Math.round(h * (tablet ? 0.46 : 0.30)) + 'px "Instrument Sans", system-ui, sans-serif';
+  ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+  ctx.fillText(S.clock || '9:41', x + w * (tablet ? 0.035 : 0.085), cy);
+
+  var rx = x + w - w * (tablet ? 0.035 : 0.075);
+  // battery
+  var bw = w * 0.062, bh = bw * 0.47, bx = rx - bw, by = cy - bh/2;
+  ctx.globalAlpha = .45; ctx.strokeStyle = t.text;
+  ctx.lineWidth = Math.max(1, bh * 0.11);
+  rrect(ctx, bx, by, bw, bh, bh * 0.32); ctx.stroke();
+  ctx.fillStyle = t.text;
+  rrect(ctx, bx + bw + bh*0.10, cy - bh*0.17, bh*0.13, bh*0.34, bh*0.06); ctx.fill();
+  ctx.globalAlpha = 1;
+  rrect(ctx, bx + bh*0.17, by + bh*0.21, (bw - bh*0.34) * 0.74, bh*0.58, bh*0.19); ctx.fill();
+  // wifi
+  var wx = bx - w * 0.032, r0 = w * 0.019;
+  ctx.strokeStyle = t.text; ctx.lineCap = 'round';
+  ctx.lineWidth = Math.max(1, w * 0.0058);
+  for(var i=1;i<=2;i++){
+    ctx.beginPath();
+    ctx.arc(wx, cy + r0*0.66, r0 * (i/2), -Math.PI*0.78, -Math.PI*0.22);
+    ctx.stroke();
+  }
+  ctx.beginPath(); ctx.arc(wx, cy + r0*0.60, Math.max(1, w*0.0042), 0, Math.PI*2); ctx.fill();
+  // signal
+  var sx = wx - w * 0.050, barW = w * 0.0082, gap = w * 0.0046, maxH = h * 0.30;
+  for(var j=0;j<4;j++){
+    var bhj = maxH * (0.40 + j * 0.20);
+    rrect(ctx, sx + j*(barW+gap), cy + maxH/2 - bhj, barW, bhj, barW*0.4); ctx.fill();
+  }
+  ctx.textAlign = 'start'; ctx.textBaseline = 'alphabetic';
+}
+
 /* Draws the screen contents (chrome bar + page image) into a clipped box. */
 function drawScreenContents(ctx, x, y, w, h, img, chH, srcRect){
+  var d = DEVICES[S.device];
   ctx.fillStyle = '#FFFFFF';
   ctx.fillRect(x, y, w, h);
-  if(chH) drawChromeBar(ctx, x, y, w, chH);
-  var cy = y + chH, ch = h - chH;
+  if(chH){
+    if(d.kind === 'laptop') drawChromeBar(ctx, x, y, w, chH);
+    else drawStatusBar(ctx, x, y, w, chH, d);
+  }
+  var sb = safeBottom(d);
+  var cy = y + chH, ch = h - chH - sb;
   ctx.drawImage(img, srcRect.sx, srcRect.sy, srcRect.sw, srcRect.sh, x, cy, w, ch);
+  if(sb){ ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x, y + h - sb, w, sb); }
+  if(homeBarH(d)){
+    var hw = w * 0.36, hh = Math.max(2, Math.round(w * 0.0135));
+    ctx.fillStyle = (S.chrome === 'dark') ? 'rgba(255,255,255,.85)' : 'rgba(18,18,20,.70)';
+    rrect(ctx, x + (w - hw)/2, y + h - hh * 2.7, hw, hh, hh/2); ctx.fill();
+  }
 }
 
 function drawMacBook(ctx, ox, oy, g, img, chH, srcRect){
@@ -1143,20 +1489,101 @@ function drawMacBook(ctx, ox, oy, g, img, chH, srcRect){
   drawScreenContents(ctx, sx, sy, g.W, g.H, img, chH, srcRect);
   ctx.restore();
 
-  // notch
-  if(S.notch){
+}
+
+function drawPhone(ctx, ox, oy, g, img, chH, srcRect){
+  var skin = SKINS[S.finish];
+  var W = g.W, bw = g.bodyW, bh = g.bodyH, r = g.bodyR;
+
+  if(S.shadow){
+    ctx.save();
+    ctx.shadowColor = 'rgba(6,11,15,0.42)';
+    ctx.shadowBlur = W * 0.20;
+    ctx.shadowOffsetY = W * 0.085;
+    ctx.fillStyle = skin.lid[1];
+    rrect(ctx, ox, oy, bw, bh, r); ctx.fill();
+    ctx.restore();
+  }
+
+  // side buttons, drawn under the body so they read as edges
+  if(g.kind === 'phone'){
+    var t = Math.max(2, Math.round(W * 0.0105));
+    ctx.fillStyle = skin.base[1];
+    [[0, bh*0.150, bh*0.032], [0, bh*0.220, bh*0.060], [0, bh*0.295, bh*0.060]].forEach(function(b){
+      rrect(ctx, ox - t*0.75, oy + b[1], t*1.6, b[2], t*0.7); ctx.fill();
+    });
+    rrect(ctx, ox + bw - t*0.85, oy + bh*0.238, t*1.6, bh*0.095, t*0.7); ctx.fill();
+  }
+
+  var lg = ctx.createLinearGradient(ox, oy, ox + bw, oy + bh);
+  lg.addColorStop(0, skin.lid[0]); lg.addColorStop(0.5, skin.lid[1]); lg.addColorStop(1, skin.lid[0]);
+  ctx.fillStyle = lg;
+  rrect(ctx, ox, oy, bw, bh, r); ctx.fill();
+
+  // black glass sitting just inside the metal
+  var inset = g.bezel * 0.34;
+  ctx.fillStyle = '#08090B';
+  rrect(ctx, ox + inset, oy + inset, bw - inset*2, bh - inset*2, Math.max(0, r - inset)); ctx.fill();
+
+  ctx.save();
+  rrect(ctx, ox + g.scrOffX, oy + g.scrOffY, g.W, g.H, g.scrR);
+  ctx.clip();
+  drawScreenContents(ctx, ox + g.scrOffX, oy + g.scrOffY, g.W, g.H, img, chH, srcRect);
+  ctx.restore();
+
+  if(g.plain){
+    // home button on the classic body
+    var cx = ox + bw/2, cyb = oy + bh - g.topBezel*0.5, rad = W*0.055;
+    ctx.beginPath(); ctx.arc(cx, cyb, rad, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(0,0,0,.22)'; ctx.lineWidth = Math.max(1, W*0.005); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, oy + g.topBezel*0.48, W*0.014, 0, Math.PI*2);
+    ctx.fillStyle = '#15181C'; ctx.fill();
+  }
+
+  ctx.save();
+  ctx.lineWidth = Math.max(1, W * 0.004);
+  ctx.strokeStyle = skin.lidEdge;
+  rrect(ctx, ox + ctx.lineWidth/2, oy + ctx.lineWidth/2, bw - ctx.lineWidth, bh - ctx.lineWidth, r);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawDevice(ctx, ox, oy, g, img, chH, srcRect){
+  if(g.kind === 'laptop') drawMacBook(ctx, ox, oy, g, img, chH, srcRect);
+  else drawPhone(ctx, ox, oy, g, img, chH, srcRect);
+}
+
+/* Cutouts that sit on top of the page pixels. */
+function drawOverlays(ctx, ox, oy, g){
+  if(!S.notch) return;
+  var d = DEVICES[S.device];
+  if(g.kind === 'laptop'){
+    var lidX = ox + Math.round((g.baseW - g.lidW)/2);
     var nw = g.notchW, nh = g.notchH, nx = lidX + (g.lidW - nw)/2;
     ctx.fillStyle = '#08090B';
-    rrect(ctx, nx, lidY, nw, nh, [0,0,nh*0.55,nh*0.55]); ctx.fill();
-    ctx.beginPath();
-    ctx.arc(nx + nw/2, lidY + nh*0.52, nh*0.08, 0, Math.PI*2);
+    rrect(ctx, nx, oy, nw, nh, [0,0,nh*0.55,nh*0.55]); ctx.fill();
+    ctx.beginPath(); ctx.arc(nx + nw/2, oy + nh*0.52, nh*0.08, 0, Math.PI*2);
     ctx.fillStyle = '#191D22'; ctx.fill();
+    return;
+  }
+  if(d.notch === 'island'){
+    var iw = g.islandW, ih = g.islandH;
+    var ix = ox + g.scrOffX + (g.W - iw)/2, iy = oy + g.scrOffY + g.islandTop;
+    ctx.fillStyle = '#07080A';
+    rrect(ctx, ix, iy, iw, ih, ih/2); ctx.fill();
+    ctx.beginPath();
+    ctx.arc(ix + iw - ih*0.52, iy + ih*0.5, ih*0.21, 0, Math.PI*2);
+    ctx.fillStyle = '#171A1F'; ctx.fill();
+  } else if(d.notch === 'hole'){
+    ctx.beginPath();
+    ctx.arc(ox + g.scrOffX + g.W/2, oy + g.scrOffY + g.holeTop + g.holeR, g.holeR, 0, Math.PI*2);
+    ctx.fillStyle = '#07080A'; ctx.fill();
   }
 }
 
 function compose(shot){
-  var d = DEVICES[S.device], g = geometry(d.w, d.h);
-  var chH = S.chrome === 'off' ? 0 : chromeHeight(d.w);
+  var d = DEVICES[S.device], g = geometry(d);
+  var chH = S.chrome === 'off' ? 0 : chromeHeight(d);
   var s = S.scale;
   var pad = S.pad;
 
@@ -1180,16 +1607,18 @@ function compose(shot){
         srcRect = {sx:0, sy:0, sw:srcW, sh:srcH};
       }
 
+      noSafeArea = !!S.full;
       var canvas = document.createElement('canvas');
       var ctx;
 
       if(S.frame === 'macbook' && !S.full){
-        canvas.width  = Math.round((g.baseW + pad*2) * s);
-        canvas.height = Math.round((g.lidH + g.baseH + pad*2) * s);
+        canvas.width  = Math.round((g.frameW + pad*2) * s);
+        canvas.height = Math.round((g.frameH + pad*2) * s);
         ctx = canvas.getContext('2d');
         ctx.scale(s, s);
-        paintBackdrop(ctx, g.baseW + pad*2, g.lidH + g.baseH + pad*2);
-        drawMacBook(ctx, pad, pad, g, img, chH, srcRect);
+        paintBackdrop(ctx, g.frameW + pad*2, g.frameH + pad*2);
+        drawDevice(ctx, pad, pad, g, img, chH, srcRect);
+        drawOverlays(ctx, pad, pad, g);
       } else {
         // flat screen output (also used for full-page capture)
         var W = d.w, H = chH + contentH;
@@ -1215,6 +1644,7 @@ function compose(shot){
         ctx.restore();
       }
 
+      noSafeArea = false;
       canvas.toBlob(function(blob){
         if(!blob) return reject(new Error('Could not build the image.'));
         resolve({blob:blob, w:canvas.width, h:canvas.height});
@@ -1536,6 +1966,400 @@ async function saveShot(){
   toast('Press and hold the image above (or right-click it) and choose “Save image”.', true);
 }
 
+/* ─────────────────────────────  recording  ───────────────────────── */
+
+var ptr = {x:0, y:0, on:false};
+var ripples = [];
+var MAX_REC_MS = 3 * 60 * 1000;
+
+var R = {
+  active:false, stream:null, track:null, video:null,
+  canvas:null, ctx:null, recorder:null, chunks:[],
+  raf:0, timer:0, started:0, layout:null, mime:'',
+  rawBlob:null, rawMs:0, outBlob:null, outUrl:null, outSpeed:1, wasFS:false
+};
+
+function pickMime(){
+  if(!window.MediaRecorder) return '';
+  var c = ['video/mp4;codecs=avc1.42E01E,mp4a.40.2','video/mp4;codecs=avc1.42E01E','video/mp4',
+           'video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];
+  for(var i=0;i<c.length;i++){
+    try{ if(MediaRecorder.isTypeSupported(c[i])) return c[i]; }catch(e){}
+  }
+  return '';
+}
+function extFor(mime){ return /mp4/i.test(mime) ? 'mp4' : 'webm'; }
+
+function videoLayout(){
+  var d = DEVICES[S.device], g = geometry(d);
+  var chH = S.chrome === 'off' ? 0 : chromeHeight(d);
+  var framed = (S.frame === 'macbook');
+  var lw = (framed ? g.frameW : d.w) + S.pad*2;
+  var lh = (framed ? g.frameH : d.h) + S.pad*2;
+  var k = Math.min(1, 1920/lw, 1920/lh);
+  return {
+    d:d, g:g, chH:chH, framed:framed, lw:lw, lh:lh, k:k,
+    outW: Math.round(lw*k/2)*2,
+    outH: Math.round(lh*k/2)*2,
+    contentW: d.w, contentH: d.h - chH,
+    scrX: framed ? (S.pad + g.scrOffX) : S.pad,
+    scrY: framed ? (S.pad + g.scrOffY) : S.pad,
+    originX: framed ? (S.pad + g.scrOffX) : S.pad,
+    originY: (framed ? S.pad + g.scrOffY : S.pad) + chH
+  };
+}
+
+function drawPointer(ctx, L){
+  var now = performance.now();
+  for(var i=ripples.length-1;i>=0;i--){
+    var age = now - ripples[i].t;
+    if(age > 520){ ripples.splice(i,1); continue; }
+    var p = age/520, r = 8 + p*34;
+    ctx.beginPath();
+    ctx.arc(L.originX + ripples[i].x, L.originY + ripples[i].y, r, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(30,30,32,' + (0.45*(1-p)).toFixed(3) + ')';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+  }
+  if(!ptr.on) return;
+  var x = L.originX + ptr.x, y = L.originY + ptr.y, s = 1.35;
+  ctx.save();
+  ctx.translate(x, y); ctx.scale(s, s);
+  ctx.beginPath();
+  ctx.moveTo(0,0); ctx.lineTo(0,17.5); ctx.lineTo(4.4,13.6);
+  ctx.lineTo(7.4,20.4); ctx.lineTo(10.6,19.0); ctx.lineTo(7.7,12.4);
+  ctx.lineTo(13.1,12.0); ctx.closePath();
+  ctx.fillStyle = '#FFFFFF';
+  ctx.strokeStyle = 'rgba(20,20,22,.92)';
+  ctx.lineWidth = 1.4; ctx.lineJoin = 'round';
+  ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 4; ctx.shadowOffsetY = 1;
+  ctx.fill();
+  ctx.shadowColor = 'transparent';
+  ctx.stroke();
+  ctx.restore();
+}
+
+/* The backdrop, aluminium body and shadows never change during a take, so
+   they are rendered once and blitted; only the page pixels move.        */
+function buildPlate(L){
+  var c = document.createElement('canvas');
+  c.width = L.outW; c.height = L.outH;
+  var x = c.getContext('2d');
+  x.setTransform(L.outW/L.lw, 0, 0, L.outH/L.lh, 0, 0);
+  if(S.backdrop === 'none'){ x.fillStyle = '#FFFFFF'; x.fillRect(0,0,L.lw,L.lh); }
+  else paintBackdrop(x, L.lw, L.lh);
+
+  var blank = document.createElement('canvas');
+  blank.width = blank.height = 2;
+  var bx = blank.getContext('2d');
+  bx.fillStyle = '#FFFFFF'; bx.fillRect(0,0,2,2);
+  var blankRect = {sx:0, sy:0, sw:2, sh:2};
+
+  if(L.framed){
+    drawDevice(x, S.pad, S.pad, L.g, blank, 0, blankRect);
+  } else {
+    var W = L.d.w, H = L.d.h, radius = L.chH ? Math.round(W*0.0085) : 0;
+    if(S.shadow && S.pad > 0){
+      x.save();
+      x.shadowColor = 'rgba(6,11,15,0.40)';
+      x.shadowBlur = W*0.045; x.shadowOffsetY = W*0.018;
+      x.fillStyle = '#fff';
+      rrect(x, S.pad, S.pad, W, H, radius); x.fill();
+      x.restore();
+    }
+  }
+  return c;
+}
+
+function paintVideoFrame(ctx, L, src, srcRect){
+  ctx.setTransform(1,0,0,1,0,0);
+  ctx.clearRect(0, 0, L.outW, L.outH);
+  ctx.drawImage(L.plate, 0, 0);
+  ctx.setTransform(L.outW/L.lw, 0, 0, L.outH/L.lh, 0, 0);
+  ctx.save();
+  rrect(ctx, L.scrX, L.scrY, L.d.w, L.d.h, L.framed ? L.g.scrR : (L.chH ? Math.round(L.d.w*0.0085) : 0));
+  ctx.clip();
+  drawScreenContents(ctx, L.scrX, L.scrY, L.d.w, L.d.h, src, L.chH, srcRect);
+  ctx.restore();
+  if(L.framed) drawOverlays(ctx, S.pad, S.pad, L.g);
+  if(S.cursor) drawPointer(ctx, L);
+  ctx.setTransform(1,0,0,1,0,0);
+}
+
+function fmtTime(ms){
+  var t = Math.floor(ms/1000);
+  return Math.floor(t/60) + ':' + String(t % 60).padStart(2, '0');
+}
+
+function wait(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+async function runCountdown(){
+  if(!S.countdown) return;
+  var box = el('countdown'), num = el('countNum');
+  box.classList.add('on');
+  for(var n=3;n>=1;n--){ num.textContent = n; await wait(800); }
+  box.classList.remove('on');
+  await wait(120);
+}
+
+async function startRecording(){
+  if(R.active || !S.loaded) return;
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia || !window.MediaRecorder){
+    return toast('This browser cannot record the screen. Chrome or Edge will work.', true);
+  }
+  R.mime = pickMime();
+
+  var stream;
+  try{
+    stream = await navigator.mediaDevices.getDisplayMedia({
+      video: {frameRate:{ideal:30, max:60}, displaySurface:'browser'},
+      audio: false,
+      preferCurrentTab: true,
+      selfBrowserSurface: 'include',
+      surfaceSwitching: 'exclude'
+    });
+  }catch(err){
+    if(err && err.name === 'NotAllowedError'){
+      return toast(hostedInClaude
+        ? 'Screen recording is blocked inside this embedded page. Open the downloaded HTML file instead.'
+        : 'Recording needs permission to share this tab.', true);
+    }
+    return toast('Could not start screen capture: ' + (err && err.message || err), true);
+  }
+
+  R.stream = stream;
+  R.track = stream.getVideoTracks()[0];
+  R.active = true;
+  R.started = 0;
+  R.recorder = null;
+  el('recordBtn').disabled = true;
+
+  // fullscreen stage
+  R.wasFS = false;
+  if(S.recMode === 'fs'){
+    try{
+      if(document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();
+      R.wasFS = true;
+    }catch(e){ /* keep going in-window */ }
+    document.body.classList.add('rec-fs');
+    lastFit = '';
+    fit();
+    await wait(260);
+  }
+
+  // crop the capture down to the screen element
+  var cropped = false;
+  try{
+    if(window.CropTarget && R.track.cropTo){
+      var target = await window.CropTarget.fromElement($frame);
+      await R.track.cropTo(target);
+      cropped = true;
+    }
+  }catch(e){ cropped = false; }
+
+  R.video = document.createElement('video');
+  R.video.muted = true; R.video.playsInline = true; R.video.srcObject = stream;
+  try{ await R.video.play(); }catch(e){}
+
+  R.layout = videoLayout();
+  R.layout.plate = buildPlate(R.layout);
+  R.canvas = document.createElement('canvas');
+  R.canvas.width = R.layout.outW; R.canvas.height = R.layout.outH;
+  R.ctx = R.canvas.getContext('2d');
+
+  R.track.addEventListener('ended', function(){ if(R.active) stopRecording(); });
+
+  if(S.cursor && $frame.contentWindow) $frame.contentWindow.postMessage({__mb:'cmd', cmd:'ptron'}, '*');
+  ripples.length = 0; ptr.on = false;
+
+  await runCountdown();
+  if(!R.active) return;   // cancelled mid-countdown
+
+  // manual crop rect for browsers without Region Capture
+  var manual = null;
+  if(!cropped){
+    var rect = $frame.getBoundingClientRect();
+    var sw = R.video.videoWidth || window.innerWidth;
+    var ratio = sw / window.innerWidth;
+    manual = {x:rect.left*ratio, y:rect.top*ratio, w:rect.width*ratio, h:rect.height*ratio};
+  }
+
+  function frame(){
+    if(!R.active) return;
+    var vw = R.video.videoWidth, vh = R.video.videoHeight;
+    if(vw && vh){
+      paintVideoFrame(R.ctx, R.layout, R.video,
+        manual ? {sx:manual.x, sy:manual.y, sw:manual.w, sh:manual.h}
+               : {sx:0, sy:0, sw:vw, sh:vh});
+    }
+    R.raf = requestAnimationFrame(frame);
+  }
+  frame();
+
+  var outStream = R.canvas.captureStream(30);
+  R.chunks = [];
+  try{
+    R.recorder = new MediaRecorder(outStream, R.mime
+      ? {mimeType:R.mime, videoBitsPerSecond:12000000}
+      : {videoBitsPerSecond:12000000});
+  }catch(e){
+    endRecordingUI();
+    return toast('Could not start the recorder: ' + (e.message || e), true);
+  }
+  R.recorder.ondataavailable = function(e){ if(e.data && e.data.size) R.chunks.push(e.data); };
+  R.recorder.onstop = finishRecording;
+  R.recorder.start(250);
+  R.started = performance.now();
+
+  el('recLive').hidden = false;
+  el('recMeta').textContent = R.layout.outW + '×' + R.layout.outH +
+    (S.speed !== 1 ? ' · ' + S.speed + '×' : '') + (cropped ? '' : ' · manual crop');
+  R.timer = setInterval(function(){
+    var ms = performance.now() - R.started;
+    el('recTime').textContent = fmtTime(ms);
+    if(ms > MAX_REC_MS){ toast('Reached the 3 minute limit.'); stopRecording(); }
+  }, 250);
+}
+
+function endRecordingUI(){
+  R.active = false;
+  clearInterval(R.timer);
+  cancelAnimationFrame(R.raf);
+  el('recLive').hidden = true;
+  el('countdown').classList.remove('on');
+  el('recordBtn').disabled = !S.loaded;
+  if($frame.contentWindow) $frame.contentWindow.postMessage({__mb:'cmd', cmd:'ptroff'}, '*');
+  if(R.stream) R.stream.getTracks().forEach(function(t){ try{ t.stop(); }catch(e){} });
+  R.stream = null; R.track = null;
+  if(R.video){ R.video.srcObject = null; R.video = null; }
+  document.body.classList.remove('rec-fs');
+  if(document.fullscreenElement && document.exitFullscreen) document.exitFullscreen()['catch'](function(){});
+  lastFit = '';
+  setTimeout(fit, 60);
+}
+
+function stopRecording(){
+  if(!R.active) return;
+  if(!R.recorder || !R.started){ R.recorder = null; endRecordingUI(); return; }
+  R.rawMs = performance.now() - R.started;
+  var rec = R.recorder;
+  R.recorder = null;
+  endRecordingUI();
+  if(rec && rec.state !== 'inactive'){ try{ rec.stop(); }catch(e){ } }
+  else finishRecording();
+}
+
+async function finishRecording(){
+  var type = R.mime || 'video/webm';
+  R.rawBlob = new Blob(R.chunks, {type:type});
+  R.chunks = [];
+  if(!R.rawBlob.size) return toast('The recording came back empty.', true);
+  if(R.rawMs < 400) return toast('That recording was too short.', true);
+  await exportVideo(S.speed);
+}
+
+async function retime(blob, speed, layout, sourceMs){
+  if(speed === 1) return blob;
+  return new Promise(function(resolve, reject){
+    var url = URL.createObjectURL(blob);
+    var v = document.createElement('video');
+    v.muted = true; v.playsInline = true; v.preload = 'auto'; v.src = url;
+
+    var c = document.createElement('canvas');
+    c.width = layout.outW; c.height = layout.outH;
+    var x = c.getContext('2d');
+    var rec, parts = [], done = false, t0 = 0, tick = 0;
+
+    function cleanup(){
+      clearInterval(tick);
+      URL.revokeObjectURL(url);
+    }
+    v.onerror = function(){ cleanup(); reject(new Error('Could not read the recording back.')); };
+    v.onloadedmetadata = function(){
+      var out = c.captureStream(30);
+      try{
+        rec = new MediaRecorder(out, R.mime ? {mimeType:R.mime, videoBitsPerSecond:12000000}
+                                            : {videoBitsPerSecond:12000000});
+      }catch(e){ cleanup(); return reject(e); }
+      rec.ondataavailable = function(e){ if(e.data && e.data.size) parts.push(e.data); };
+      rec.onstop = function(){ cleanup(); resolve(new Blob(parts, {type:R.mime || 'video/webm'})); };
+
+      function draw(){
+        if(done) return;
+        x.drawImage(v, 0, 0, c.width, c.height);
+        if(v.requestVideoFrameCallback) v.requestVideoFrameCallback(draw);
+        else requestAnimationFrame(draw);
+      }
+      v.onended = function(){
+        done = true;
+        setTimeout(function(){ try{ rec.stop(); }catch(e){} }, 150);
+      };
+      v.playbackRate = speed;
+      v.play().then(function(){
+        t0 = performance.now();
+        var target = sourceMs / speed;
+        rec.start(250);
+        draw();
+        tick = setInterval(function(){
+          var p = Math.min(99, Math.round((performance.now() - t0) / target * 100));
+          el('busyMsg').textContent = 'Rendering at ' + speed + '× — ' + p + '%';
+        }, 200);
+      })['catch'](function(e){ cleanup(); reject(e); });
+    };
+  });
+}
+
+async function exportVideo(speed){
+  busy(true);
+  el('busyMsg').hidden = false;
+  el('busyMsg').textContent = speed === 1 ? 'Finishing up…' : 'Rendering at ' + speed + '×…';
+  try{
+    var out = await retime(R.rawBlob, speed, R.layout, R.rawMs);
+    if(R.outUrl) URL.revokeObjectURL(R.outUrl);
+    R.outBlob = out;
+    R.outSpeed = speed;
+    R.outUrl = URL.createObjectURL(out);
+    var secs = (R.rawMs / 1000 / speed);
+    el('recVideo').src = R.outUrl;
+    el('recSize').textContent = R.layout.outW + ' × ' + R.layout.outH + ' px · ' +
+      secs.toFixed(1) + 's at ' + speed + '× · ' + prettyBytes(out.size) + ' · .' + extFor(R.mime);
+    S.respeed = speed;
+    setSeg('respeedSeg', String(speed));
+    el('videoModal').classList.add('on');
+    if(!/mp4/i.test(R.mime)){
+      toast('Saved as WebM — this browser cannot make MP4. Etsy may need a converted file.', true);
+    }
+  }catch(err){
+    toast(err.message || 'Could not render the video.', true);
+  }finally{
+    busy(false);
+    el('busyMsg').hidden = true;
+  }
+}
+
+async function saveVideo(){
+  if(!R.outBlob) return;
+  var base = (S.fileName || 'page').replace(/\.html?$/i, '') || 'page';
+  var fn = base + '-' + S.device + '-' + R.outSpeed + 'x.' + extFor(R.mime);
+  if(downloadsApi){
+    try{
+      await downloadsApi.save({filename:fn, data:R.outBlob});
+      return toast('Saved ' + fn + '.');
+    }catch(e){
+      if(e && e.code === 'declined') return;
+      if(e && e.code === 'too_large') return toast('That video is too large to save here.', true);
+    }
+  }
+  if(!hostedInClaude && nativeSave(R.outBlob, fn)) return toast('Saved ' + fn + '.');
+  toast('Saving files is not available in this view.', true);
+}
+
+function setSeg(id, value){
+  Array.prototype.forEach.call(el(id).querySelectorAll('button'), function(b){
+    b.setAttribute('aria-pressed', String(b.dataset.v === value));
+  });
+}
+
 /* ─────────────────────────────  wiring  ──────────────────────────── */
 
 // backdrop swatches
@@ -1578,9 +2402,17 @@ async function saveShot(){
   });
 })();
 
-el('deviceSel').addEventListener('change', function(e){ S.device = e.target.value; render(); });
+var chromePref = {laptop:'off', mobile:'light'};
+function family(id){ return DEVICES[id].kind === 'laptop' ? 'laptop' : 'mobile'; }
+el('deviceSel').addEventListener('change', function(e){
+  chromePref[family(S.device)] = S.chrome;
+  S.device = e.target.value;
+  S.chrome = chromePref[family(S.device)];
+  setSeg('chromeSeg', S.chrome);
+  render();
+});
 segInit('finishSeg', 'finish', render);
-segInit('chromeSeg', 'chrome', render);
+segInit('chromeSeg', 'chrome', function(){ chromePref[family(S.device)] = S.chrome; render(); });
 segInit('frameSeg', 'frame', updateExportHint);
 segInit('scaleSeg', 'scale', updateExportHint);
 
@@ -1593,6 +2425,7 @@ el('fullPage').addEventListener('change', function(e){
   updateExportHint();
 });
 el('urlInput').addEventListener('input', function(e){ S.url = e.target.value; render(); });
+el('clockInput').addEventListener('input', function(e){ S.clock = e.target.value; render(); });
 el('padRange').addEventListener('input', function(e){
   S.pad = +e.target.value;
   el('padOut').textContent = S.pad + ' px';
@@ -1612,6 +2445,7 @@ el('clearFile').addEventListener('click', function(){
   el('urlText').textContent = 'No file loaded';
   el('statusDot').className = 'dot';
   el('captureBtn').disabled = true;
+  el('recordBtn').disabled = true;
   el('navBack').disabled = el('navFwd').disabled = el('navReload').disabled = true;
 });
 
@@ -1632,6 +2466,39 @@ el('closeModal').addEventListener('click', closeModal);
 el('againBtn').addEventListener('click', closeModal);
 el('modal').addEventListener('click', function(e){ if(e.target === el('modal')) closeModal(); });
 
+segInit('recModeSeg', 'recMode');
+segInit('speedSeg', 'speed');
+el('cursorOn').addEventListener('change', function(e){ S.cursor = e.target.checked; });
+el('countdownOn').addEventListener('change', function(e){ S.countdown = e.target.checked; });
+el('recordBtn').addEventListener('click', startRecording);
+el('stopRec').addEventListener('click', stopRecording);
+
+function closeVideo(){
+  el('videoModal').classList.remove('on');
+  try{ el('recVideo').pause(); }catch(e){}
+}
+el('closeVideo').addEventListener('click', closeVideo);
+el('discardVideo').addEventListener('click', function(){
+  closeVideo();
+  if(R.outUrl) URL.revokeObjectURL(R.outUrl);
+  R.outUrl = null; R.outBlob = null; R.rawBlob = null;
+  el('recVideo').removeAttribute('src');
+});
+el('videoModal').addEventListener('click', function(e){ if(e.target === el('videoModal')) closeVideo(); });
+el('saveVideo').addEventListener('click', saveVideo);
+segInit('respeedSeg', 'respeed');
+el('respeedBtn').addEventListener('click', function(){
+  if(!R.rawBlob) return;
+  var v = parseFloat(S.respeed || 1);
+  if(v === R.outSpeed) return toast('Already exported at ' + v + '×.');
+  closeVideo();
+  exportVideo(v);
+});
+
+document.addEventListener('fullscreenchange', function(){
+  if(!document.fullscreenElement && R.active && S.recMode === 'fs') stopRecording();
+});
+
 function openBasket(){ drawGallery(); el('basketModal').classList.add('on'); el('closeBasket').focus(); }
 function closeBasket(){ el('basketModal').classList.remove('on'); releaseThumbs(); }
 el('basketBtn').addEventListener('click', openBasket);
@@ -1646,6 +2513,8 @@ el('clearBasket').addEventListener('click', function(){
 
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
+  if(R.active) return stopRecording();
+  if(el('videoModal').classList.contains('on')) return closeVideo();
   if(el('basketModal').classList.contains('on')) return closeBasket();
   if(el('modal').classList.contains('on')) closeModal();
 });
